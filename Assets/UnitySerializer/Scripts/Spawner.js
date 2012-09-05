@@ -3,8 +3,10 @@
 var prefab : GameObject;
 var target : Transform;
 
-function Start () {
+public var testArrayItems = new String[10];
 
+function Start () {
+	testArrayItems[2] = "Hello";
 }
 
 function Update () {

@@ -3088,12 +3088,13 @@ namespace Serialization
         internal static void WriteValue(BinaryWriter writer, object value)
         {
             WriteAValue write;
+		
             if (!Writers.TryGetValue(value.GetType(), out write))
             {
                 writer.Write((int)value);
                 return;
             }
-            write(writer, value);
+		    write(writer, value);
         }
 
         /// <summary>

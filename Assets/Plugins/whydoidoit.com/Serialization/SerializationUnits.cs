@@ -179,7 +179,7 @@ namespace Serialization
 
             var stream = new MemoryStream();
             var outputWr = new BinaryWriter(stream);
-            outputWr.Write("SerV7");
+            outputWr.Write("SerV8");
             //New, store the verbose property
             outputWr.Write(UnitySerializer.Verbose);
             outputWr.Write(UnitySerializer.KnownTypes.Count);
@@ -300,7 +300,17 @@ namespace Serialization
             {
                 for (int i = 0; i < count; i++)
                 {
-                    WriteSimpleValue(array.GetValue(i));
+                    var v = array.GetValue(i);
+					if(v==null)
+					{
+						WriteSimpleValue((byte)0);
+					}
+					else
+					{
+						WriteSimpleValue((byte)1);
+						WriteSimpleValue(v);
+					}
+					
                 }
             }
         }
@@ -478,10 +488,29 @@ namespace Serialization
                 return a;
             }
             var result = Array.CreateInstance(elementType, count);
-            for (var l = 0; l < count; l++)
-            {
-                result.SetValue(this.ReadSimpleValue(elementType), l);
-            }
+			if(UnitySerializer.currentVersion >= 8)
+			{
+	            for (var l = 0; l < count; l++)
+	            {
+					byte go = (byte)ReadSimpleValue(typeof(byte));
+					if(go != 0)
+					{
+	                	result.SetValue(this.ReadSimpleValue(elementType), l);
+					}
+					else
+					{
+						result.SetValue(null, l);		
+					}
+	            }
+			}
+			else
+			{
+				for (var l = 0; l < count; l++)
+	            {
+	                result.SetValue(this.ReadSimpleValue(elementType), l);
+	            }
+            
+			}
             return result;
         }
 

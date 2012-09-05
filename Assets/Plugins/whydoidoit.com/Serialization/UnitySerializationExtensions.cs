@@ -814,6 +814,7 @@ public class ProviderRendererAttributes : ProvideAttributes
 		"axis",
 		"breakForce",
 		"breakTorque",
+		"connectedBody",
 		"offsetZ",
 		"playAutomatically",
 		"animatePhysics",
